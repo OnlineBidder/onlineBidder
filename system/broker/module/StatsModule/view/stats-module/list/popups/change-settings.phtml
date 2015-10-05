@@ -1,0 +1,35 @@
+<div id="change-ads-settings">
+    <div class="change-ads-settings-content">
+        <form id="change-ads-settings-form" action="/">
+            <div id="adscounter-container"><span id="adscounter"></span></div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Стоимость открутки:</div>
+                <div class="panel-body">
+                    <div class="radio">
+                        <label><input type="radio" value="1" name="cpm-type">Установить указанную цену для всех объявлений</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" value="2" name="cpm-type">Изменить цену на указанную величину (отрицательное значение для уменьшения цены)</label>
+                    </div>
+                    <label for="ad-cpm">За 1000 показов (cpm): </label>
+                    <input id="ad-cpm" name="ad-cpm" type="text"/> руб.
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Общие настройки:</div>
+                <div class="panel-body">
+                    <div>
+                        <small>
+                            Изменить название объявлений
+                        </small>
+                    </div>
+                    <label for="ad-name">Название: </label>
+                    <input id="ad-name" name="ad-name" type="text"/>
+                </div>
+            </div>
+            <div id="error-message">
+                <span class="label label-warning"></span>
+            </div>
+        </form>
+    </div>
+</div>

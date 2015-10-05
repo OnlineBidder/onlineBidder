@@ -1,0 +1,69 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('Bidder')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/govnoTables.css')
+                        ->prependStylesheet($this->basePath() . '/css/jquery-ui.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/jquery.dataTables.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/dataTables.colReorder.css')
+                        ->prependStylesheet($this->basePath() . '/css/dataTables.tableTools.css')
+        ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/js/jquery.js')
+            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+            ->offsetSetFile(100, $this->basePath() . '/js/jquery-ui.min.js')
+            ->offsetSetFile(200, $this->basePath() . '/js/JQUI.js')
+            //->offsetSetFile(300, $this->basePath() . '/js/jquery.fixedheadertable.min.js')
+//            ->offsetSetFile(400, $this->basePath() . '/js/jquery.tablesorter.js')
+            ->offsetSetFile(500, $this->basePath() . '/js/jquery.dataTables.min.js')    // http://datatables.net/#
+            ->offsetSetFile(510, $this->basePath() . '/js/dataTables.colReorder.js')    // http://datatables.net/#
+// съезжает шапка таблицы(((            ->offsetSetFile(520, $this->basePath() . '/js/dataTables.fixedHeader.js')    // http://datatables.net/#
+            ->offsetSetFile(530, $this->basePath() . '/js/dataTables.tableTools.js')    // http://datatables.net/#
+        ; ?>
+
+    </head>
+    <body style="padding-top:0px">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Bidder') ?></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="home"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+                        <li id="stat"><a href="<?php echo $this->url('stats') ?>">Статистика</a></li>
+                    </ul>
+                    <a style="float: right; margin-top: 15px;" href="<?php echo $this->url('user', array('action' => $this->isAllowed('controller/Socnet\Controller\Socnet:index') ? 'logout' : 'login')) ?>"><?php echo $this->translate($this->isAllowed('controller/Socnet\Controller\Socnet:index') ? 'Logout' : 'Login') ?></a>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div class="container" id="page-main-container">
+            <?php echo $this->content; ?>
+            <footer>
+            </footer>
+        </div> <!-- /container -->
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

@@ -1,0 +1,44 @@
+<div>
+    <div>
+        <div>
+            <div>
+                <h3>Кабинеты</h3>
+            </div>
+            <div>
+                <?php if (!empty($cabinets)) : ?>
+                    <div class="CSSTableGenerator" >
+                        <table class="process">
+                            <tr class="process">
+                                <td class="process">Id</td>
+                                <td class="process">Тип</td>
+                                <td class="process"></td>
+                            </tr>
+                            <? foreach($cabinets as $cabinet): ?>
+                                <?/**@var $cabinet Socnet\Entity\Cabinets*/?>
+                                <tr class="process">
+                                    <td class="process"><?=$cabinet->getAccountId(); ?></td>
+                                    <td class="process"><?=$cabinet->getAccountType() === 'general' ? 'обычный' : 'агентский' ?></td>
+                                    <td class="process">
+                                        <?
+                                        if ($cabinet->getAccountType() === 'general') {
+                                            echo '<a href="' . $this->url("clients", array("action" =>  "campaigns", 'vk_account_id' => $vkAccountId, "cabinet_id" => $cabinet->getAccountId())) . '">посмотреть все кампании</a>';
+                                        } elseif (isset($vkClients[$cabinet->getAccountId()])) {
+                                            foreach ($vkClients[$cabinet->getAccountId()] as $vkClient) {
+                                                /**@var $vkClient Socnet\Entity\VkClients*/
+                                                ?>
+                                                <a href="<?= $this->url('clients', array('action'=>'campaigns', 'vk_account_id' => $vkAccountId, 'cabinet_id' => $cabinet->getAccountId(), 'client_id' => $vkClient->getId()));?>"><?=$vkClient->getName() ?></a><br>
+                                            <?
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <? endforeach; ?>
+                        </table>
+                    </div>
+                <? endif; ?>
+
+            </div>
+        </div>
+    </div>
+</div>

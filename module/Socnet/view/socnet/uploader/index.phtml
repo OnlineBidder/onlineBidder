@@ -1,0 +1,113 @@
+<? $this->headScript()->appendFile('/js/uploader/dropzone.js','text/javascript'); ?>
+<? $this->headScript()->appendFile('/js/uploader/uploader.js','text/javascript'); ?>
+
+<? $this->headLink()->appendStylesheet('/css/uploader/dropzone.css'); ?>
+<? $this->headLink()->appendStylesheet('/css/uploader/uploader.css'); ?>
+<? echo $this->headLink(); ?>
+
+<form id="uploader-form" action="/uploader/create">
+    <table class="" style="margin: 0 auto;">
+        <tbody>
+        <tr>
+            <td class="table-label">
+                <label for="titles">Заголовки:</label>
+            </td>
+            <td class="table-value">
+                <textarea class="form-control" rows="5" id="titles"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="table-label">
+                <label for="country">Страна:</label>
+            </td>
+            <td class="table-value">
+                <select class="form-control" id="country">
+                    <option value="0">Любая</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="table-label">
+                <label for="city">Город:</label>
+            </td>
+            <td class="table-value">
+                <select disabled multiple class="form-control" id="city">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="table-label">
+                <label for="exclude-city">За исключением:</label>
+            </td>
+            <td class="table-value">
+                <select disabled multiple class="form-control" id="exclude-city">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="table-label">
+                <label for="exclude-city">Пол:</label>
+            </td>
+            <td class="table-value">
+                <label class="radio-inline"><input type="radio" name="optradio">Любой</label>
+                <label class="radio-inline"><input type="radio" name="optradio">Мужской</label>
+                <label class="radio-inline"><input type="radio" name="optradio">Женский</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="table-label">
+                <label for="user-age-from">Возраст:</label>
+            </td>
+            <td class="table-value">
+                <select class="form-control" id="user-age-from">
+                    <option value="0">От</option>
+                </select>
+                <select class="form-control" id="user-age-to">
+                    <option value="0">До</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="table-label">
+                <label for="sex-status">Семейное положение:</label>
+            </td>
+            <td class="table-value">
+                <select multiple class="form-control" id="sex-status">
+                    <option value="1">Не женат</option>
+                    <option value="2">Есть подруга</option>
+                    <option value="3">Помолвлен</option>
+                    <option value="4">Женат</option>
+                    <option value="7">Влюблен</option>
+                    <option value="5">Все сложно</option>
+                    <option value="6">В активном поиске</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-group">
+
+
+    </div>
+
+</form>
+
+<form action="/uploader/add" class="dropzone" id="my-awesome-dropzone">
+
+</form>
+
+<div id="submit-btn">
+    <button type="submit" class="btn btn-primary">
+        Создать объявления
+    </button>
+</div>
+
+
+
+<script>
+    $(function(){
+        vkAdsUploader.init();
+    });
+
+</script>

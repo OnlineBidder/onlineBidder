@@ -1,0 +1,15 @@
+<h1>403 Forbidden</h1>
+
+<? if ($action === 'login'): ?>
+    <p>
+        <?=$this->translate('Ваша регистрация на модерации!');?>
+    </p>
+<? else: ?>
+<p>
+    You are not authorized to access!
+</p>
+<?sleep(2);?>
+<script type="text/javascript">
+    window.location = "/user/login"
+</script>
+<? endif; ?>

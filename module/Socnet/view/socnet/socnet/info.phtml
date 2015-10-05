@@ -1,0 +1,235 @@
+<?
+/**
+ * @var $vkAds Socnet\Entity\VkAds
+ * @var $vkCampaign Socnet\Entity\VkCampaigns
+ */
+/**@var $vkAd Socnet\Entity\VkAds*/
+?>
+<? $arFormActionParams = ['action' => 'campaigns', 'vk_account_id' => $vkAccountId, 'cabinet_id' => $cabinet_id];?>
+<? if (isset($vkClientId)) $arFormActionParams['client_id'] = $vkClientId;?>
+<? if (isset($campaignId)) $arFormActionParams['campaign_id'] = $campaignId;?>
+<a style="font-size: 20px;" href='<?= $this->url('clients', $arFormActionParams);?>'><<< Назад в кампании</a>
+<? $arFormActionParams['action'] = 'info'; ?>
+<button type="button" id="campaigns_update_button" onclick="updateCampaign();" class="btn btn-primary"> Обновить кампанию
+</button>
+<form method="post" action="<?= $this->url('socnet', $arFormActionParams);?>">
+    <div id="mainTable" class="CSSTableGenerator" >
+        <table >
+            <tr>
+                <td>Кампания</td>
+                <td>Статус</td>
+                <td>Лимит (день\всего)</td>
+                <td>Биддер</td>
+            </tr>
+            <?
+            foreach ($vkCampaigns as $vkCampaign) :
+                    ?>
+                    <tr>
+                        <td class="big_text bold_text">
+                            <?=$vkCampaign->getName()?>
+                            <? if (isset($vkAds[$vkCampaign->getId()])) :?>
+                                <div class="CSSTableGeneratorGrey" <?=!$vkCampaign->getBidderControl() ? 'style="display:none;"' : ''?>>
+                                    <table >
+                                        <tr>
+                                            <td></td>
+                                            <td>Объява</td>
+                                            <td>Активна</td>
+                                            <td>Лимит</td>
+                                            <td>Цена</td>
+                                            <td>Биддер</td>
+                                        </tr>
+                                        <? foreach ($vkAds[$vkCampaign->getId()] as $vkAd) :
+                                            if ($vkAd->getStatus() != 2 && $vkAd->getApproved() == 2) :
+                                                ?>
+                                                <tr>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" class="action_checkbox" value="<?=$vkAd->getId();?>">
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td style="font-size: 14px; font-weight: bold; max-width: 150px;">
+                                                        <a href="/socnet/stata<?='?adId='.$vkAd->getId()?>" title="<?=$vkAd->getName()?>">
+                                                            <?=mb_strlen($vkAd->getName(), 'UTF-8') > 28 ? mb_substr($vkAd->getName(), 0, 25, 'UTF-8').'...' : $vkAd->getName();?>
+                                                        <div style="font-size: 8px; color: #808080;">
+                                                            <?=$vkAd->getId()?>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <?=$vkAd->getStatus()?>
+                                                    </td>
+                                                    <td>
+                                                        <?=$vkAd->getAllLimit()?>
+                                                    </td>
+                                                    <td>
+                                                        <?=$vkAd->getCostType() == 0 ? $vkAd->getCpc() / 100 . 'р/клик' : ($vkAd->getCostType() == 1 ? $vkAd->getCpm() / 100 . 'р/1000' : 'exclusive')?>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <div class="form-group" style="display: -webkit-inline-box;">
+                                                                <label class="checkbox"><input type="checkbox" id="bidder_ads_<?=$vkAd->getId()?>" <?=$vkAd->getBidderControl() ? ' checked' : ''?> name="bidder_ads[]" value="<?=$vkAd->getId()?>"> под контроль биддера</label>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="radio" name="ad_algorithm[<?=$vkAd->getId()?>]" id="optionsRadios3"
+                                                                           value="1" <?=$vkAd->getAlgorithm() == 1 ? ' checked' : ''?>> Алг1
+                                                                </label>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="radio" name="ad_algorithm[<?=$vkAd->getId()?>]" id="optionsRadios4"
+                                                                           value="2" <?=$vkAd->getAlgorithm() == 2 ? ' checked' : ''?>> Алг2
+                                                                </label>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="radio" name="ad_algorithm[<?=$vkAd->getId()?>]" id="optionsRadios5"
+                                                                           value="3" <?=$vkAd->getAlgorithm() == 3 ? ' checked' : ''?>> Тест cpc
+                                                                </label>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="radio" name="ad_algorithm[<?=$vkAd->getId()?>]" id="optionsRadios6"
+                                                                           value="4" <?=$vkAd->getAlgorithm() == 4 ? ' checked' : ''?>> Алг4
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div style="display: inline-flex;">
+                                                            <div class="form-group">
+                                                                <div class="col-sm-10">
+                                                                    <label for="focusedInput1">Мин. кол-во показов</label>
+                                                                    <input class="form-control max-width-80" name="min_counter[<?=$vkAd->getId()?>]" id="bidder_campaigns_counter_<?=$vkAd->getId()?>" value="<?=$vkAd->getMinCounter();?>" type="text">
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-sm-10">
+                                                                    <label for="focusedInput1">Минимальный CTR в %</label>
+                                                                    <input class="form-control max-width-80" name="min_ctr[<?=$vkAd->getId()?>]" id="bidder_campaigns_counter_<?=$vkAd->getId()?>" value="<?=$vkAd->getMinCtr();?>" type="text">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-sm-10">
+                                                                    <label for="focusedInput1">Вырубать на (мин)</label>
+                                                                    <input class="form-control max-width-60" name="minutes[<?=$vkAd->getId()?>]" id="bidder_campaigns_minutes_<?=$vkAd->getId()?>" value="<?=$vkAd->getOffMinutes();?>" type="text">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-sm-10">
+                                                                    <label for="focusedInput1">Желаемый CPC (алг.2)</label>
+                                                                    <input class="form-control max-width-60" name="cpc[<?=$vkAd->getId()?>]" id="bidder_campaigns_cpc_<?=$vkAd->getId()?>" value="<?=$vkAd->getDesireCpc();?>" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <? endif; ?>
+                                        <? endforeach; ?>
+                                        <tr>
+                                            <td style="border-top-width: 1px; border-right-width: 0;" colspan="2">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="main_checkbox" value=""> Отметить все
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td colspan="4" style="border-top-width: 1px;">
+                                                С отмеченными:
+                                                <div class="btn-group">
+                                                    <button id="do_it_action_button" class="btn btn-primary btn-mini dropdown-toggle" data-toggle="dropdown">Действие <span class="caret"></span></button>
+                                                    <?
+                                                    $arFormActionParams['action'] = 'doIt';
+                                                    $arFormActionParams['campaign_id'] = $vkCampaign->getId();
+                                                    $arFormActionParams['ad_id'] = $vkCampaign->getId();
+                                                    $arFormActionParams['whatINeedToDo'] = 'play';
+                                                    ?>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href='javascript:void(0);' onclick="doItAction('start')">Запустить</a></li>
+                                                        <?
+                                                        $arFormActionParams['whatINeedToDo'] = 'stop';
+                                                        ?>
+                                                        <li><a href="#">Остановить</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table >
+                                </div>
+                            <? endif; ?>
+                        </td>
+                        <td>
+                            <?
+                            switch ($vkCampaign->getStatus()) {
+                                case Socnet\Entity\VkCampaigns::STATUS_STOP:
+                                    $status = 'остановлена';
+                                    break;
+                                case Socnet\Entity\VkCampaigns::STATUS_START:
+                                    $status = 'запущена';
+                                    break;
+                                case Socnet\Entity\VkCampaigns::STATUS_DELETED:
+                                    $status = 'удалена';
+                                    break;
+                                default:
+                                    $status = 'ошибка!';
+                            }
+                            ?>
+                            <?=$status?>
+                        </td>
+                        <td>
+                            <?=$vkCampaign->getDayLimit()?> / <?=$vkCampaign->getAllLimit()?>
+                        </td>
+
+                        <td>
+                            <label class="checkbox"><input type="checkbox" id="bidder_campaigns_<?=$vkCampaign->getId()?>" <?=$vkCampaign->getBidderControl() ? ' checked' : ''?> name="bidder_campaigns[]" value="<?=$vkCampaign->getId()?>"> под контроль биддера</label>
+                        </td>
+                    </tr>
+                <?
+
+            endforeach;
+            ?>
+        </table>
+    </div>
+    <div id="submit-btn">
+        <button type="submit" class="btn btn-primary">
+            <i class="icon-user icon-white"></i> Сохранить
+        </button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function updateCampaign() {
+        $.blockUI({ css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff'
+        } });
+
+        $.post( '<?= $this->url('vk', array('action'=>'adsCheckerForce', 'vk_account_id' => $vkAccountId, 'cabinet_id' => $cabinet_id, 'client_id' => (int) $vkClientId, 'campaign_id' => $campaignId));?>', function( data ) {
+            if (data == 1) {
+                location.reload();
+            }
+        });
+    }
+
+    function doItAction(action) {
+        var arr = $('.action_checkbox:checked').map(function() {return this.value;}).get();
+        $('#do_it_action_button').html('Выполняется....');
+        $('#mainTable').css('opacity', '0.3');
+        $.post( '<?= $this->url('vk', array('action'=>'doIt', 'vk_account_id' => $vkAccountId, 'cabinet_id' => $cabinet_id, 'client_id' => (int) $vkClientId, 'campaign_id' => $campaignId));?>',{adIds: arr, action: action}, function( data ) {
+            if (data == 1) {
+                $('#do_it_action_button').html('Действие <span class="caret"></span>');
+                $('#mainTable').css('opacity', '1');
+            }
+        });
+    }
+
+    $(document).ready( function() {
+        $("#main_checkbox").click( function() { // при клике по главному чекбоксу
+            if($('#main_checkbox').prop("checked")){ // проверяем его значение
+                $('.action_checkbox:enabled').prop("checked", true); // если чекбокс отмечен, отмечаем все чекбоксы
+            } else {
+                $('.action_checkbox:enabled').prop('checked', false); // если чекбокс не отмечен, снимаем отметку со всех чекбоксов
+            }
+        });
+
+        $( document ).tooltip();
+    });
+
+</script>
